@@ -1,13 +1,22 @@
+require('./models/Users');
 const express = require('express');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/authRoutes');
+const requireAuth = require('./middlewares/requireAuth');
+
 
 const app = express();
 
-const mongoUri = 'mongodb+srv://sudhanshu:<any>@cluster0.es4av.mongodb.net/<dbname>?retryWrites=true&w=majority'
+//setup to understand json data "bodyParser"
+app.use(bodyParser.json());
+app.use(authRoutes);
+
+const mongoUri = 'mongodb+srv://sudhanshu:<pwd>@cluster0.es4av.mongodb.net/<test>?retryWrites=true&w=majority'
 
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
-    // useCreateIndex: true
+    // createIndexes: true
     useUnifiedTopology: true
 });
 
@@ -20,8 +29,8 @@ mongoose.connection.on('error', (err) => {
 });
 
 
-app.get('/', (req, res) => {
-    res.send('Hi there!')
+app.get('/', requireAuth, (req, res) => {
+    res.send(`Your email: ${req.user.email}`)
 });
 
 app.listen(3000, () => {
