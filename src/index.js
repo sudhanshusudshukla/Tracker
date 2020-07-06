@@ -1,9 +1,11 @@
 require('./models/Users');
+require('./models/Tracks');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const requireAuth = require('./middlewares/requireAuth');
+const trackRoutes = require('./routes/trackRoutes');
 
 
 const app = express();
@@ -11,6 +13,7 @@ const app = express();
 //setup to understand json data "bodyParser"
 app.use(bodyParser.json());
 app.use(authRoutes);
+app.use(trackRoutes);
 
 const mongoUri = 'mongodb+srv://sudhanshu:<pwd>@cluster0.es4av.mongodb.net/<test>?retryWrites=true&w=majority'
 
